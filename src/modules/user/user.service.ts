@@ -19,7 +19,7 @@ export class UserService {
       throw new HttpException("Esse email já está em uso", HttpStatus.BAD_REQUEST)
     }
 
-    const createdUser = await this.userModel.create(user as User)
+    const createdUser = await this.userModel.create(user)
 
     return createdUser
   }

@@ -6,12 +6,13 @@ import {
   PrimaryKey,
   Table,
 } from 'sequelize-typescript';
+import { CreateUserDto } from './dtos/create-user.dto';
 
 @Table({
   tableName: 'user',
   timestamps: true,
 })
-export class User extends Model<User> {
+export class User extends Model<User, CreateUserDto> {
   @PrimaryKey
   @Default(DataType.UUIDV4)
   @Column(DataType.UUID)
