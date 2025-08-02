@@ -2,6 +2,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { User } from './user.entity';
 import { InjectModel } from '@nestjs/sequelize';
 import { CreateUserDto } from './dtos/create-user.dto';
+import { UpdateUserDto } from './dtos/update-user.dto';
 
 @Injectable()
 export class UserService {
@@ -11,13 +12,7 @@ export class UserService {
   ) {}
 
   async create(user: CreateUserDto) {
-    const emailAlreadyExists = await this.userModel.findOne({
-      where: { email: user.email },
-    });
-
-    if (emailAlreadyExists) {
-      throw new HttpException("Esse email já está em uso", HttpStatus.BAD_REQUEST)
-    }
+    await this.validateEmail(user.email)
 
     const createdUser = await this.userModel.create(user)
 
@@ -26,5 +21,31 @@ export class UserService {
 
   async findAll() {
     return await this.userModel.findAll()
+  }
+
+  async update(id: string, user: UpdateUserDto) {
+    
+    if (user.email) {
+      await this.validateEmail(user.email)
+    }
+
+    const updatedUser = await this.userModel.update(
+      { ...user },
+      { where: { user_id: id }, returning: true },
+    );
+
+    return updatedUser[1][0]
+  }
+
+  async validateEmail(email: string) {
+    const emailAlreadyExists = await this.userModel.findOne({
+      where: { email: email },
+    });
+
+    if (emailAlreadyExists) {
+      throw new HttpException("Esse email já está em uso", HttpStatus.BAD_REQUEST)
+    }
+
+    return true
   }
 }
