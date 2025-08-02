@@ -24,7 +24,6 @@ dotenv.config();
       ],
       logging: true,
       autoLoadModels: true,
-      sync: { force: true }
     }),
   ],
   controllers: [],
