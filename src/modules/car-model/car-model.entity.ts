@@ -9,12 +9,13 @@ import {
   Table,
 } from 'sequelize-typescript';
 import { Brand } from '../brand/brand.entity';
+import { CreateCarModelDto } from './dtos/create-car-model.dto';
 
 @Table({
   tableName: 'car_model',
   timestamps: true,
 })
-export class CarModel extends Model<CarModel> {
+export class CarModel extends Model<CarModel, CreateCarModelDto> {
   @PrimaryKey
   @Default(DataType.UUIDV4)
   @Column(DataType.UUID)
@@ -40,10 +41,10 @@ export class CarModel extends Model<CarModel> {
   year: string;
 
   @Column({
-    type: DataType.STRING,
+    type: DataType.INTEGER,
     allowNull: false,
   })
-  price: string;
+  price: number;
 
   @Default(true)
   @Column({
