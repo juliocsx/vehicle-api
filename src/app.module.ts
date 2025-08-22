@@ -8,7 +8,14 @@ import { AuthModule } from './modules/auth/auth.module';
 import { BodyFormatter } from './middleware/bodyformatter.middleware';
 
 @Module({
-  imports: [AuthModule, UserModule, VehicleModule, BrandModule, CarModelModule, DatabaseModule],
+  imports: [
+    AuthModule,
+    UserModule,
+    VehicleModule,
+    BrandModule,
+    CarModelModule,
+    DatabaseModule,
+  ],
   controllers: [],
   providers: [],
 })
