@@ -48,10 +48,10 @@ export class Vehicle extends Model<Vehicle, CreateVehicleDto> {
   manufacture_year: string;
 
   @Column({
-    type: DataType.STRING,
+    type: DataType.INTEGER,
     allowNull: false
   })
-  mileage: string;
+  mileage: number;
 
   @ForeignKey(() => User)
   @Column({

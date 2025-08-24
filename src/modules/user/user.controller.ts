@@ -6,6 +6,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   Req,
   UseGuards,
 } from '@nestjs/common';
@@ -21,6 +22,8 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
+import { UserQueryDto } from './dtos/query-user.dto';
+import { PaginationQuery } from 'src/shared/dtos/types';
 
 @ApiTags('Abobrinha 2')
 @Controller('user')
@@ -28,26 +31,39 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post()
+  @ApiOperation({ summary: 'Registra um novo Usuario' })
+  @ApiResponse({
+    status: 201,
+    description: 'Usuário registrado com sucesso.',
+  })
   async create(@Body() user: CreateUserDto) {
     return await this.userService.create(user);
   }
 
-  @UseGuards(AuthGuard)
-  @ApiOperation({ summary: 'Lista Todos os Usuarios' })
-  @ApiBearerAuth()
   @Get()
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Lista Todos os Usuarios' })
   @ApiResponse({
     status: 200,
     description: 'Lista de usuários retornada com sucesso.',
   })
-  async findAll() {
-    return await this.userService.findAll();
+  async findAll(
+    @Query() query: UserQueryDto,
+    @Query() pagination: PaginationQuery,
+  ) {
+    return await this.userService.findAll({ ...query, ...pagination });
   }
 
-  @ApiBearerAuth()
-  @UseGuards(AuthGuard)
-  @ApiParam({ name: 'id', description: 'id do usuario' })
   @Patch(':id')
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Atualiza o Usuario apartir do user_id' })
+  @ApiParam({ name: 'id', description: 'id do usuario' })
+  @ApiResponse({
+    status: 200,
+    description: 'Usuário atualizado com sucesso.',
+  })
   async update(@Param('id') id: string, @Body() user: UpdateUserDto) {
     return await this.userService.update(id, user);
   }

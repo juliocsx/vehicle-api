@@ -3,6 +3,8 @@ import { InjectModel } from '@nestjs/sequelize';
 import { Vehicle } from './vehicle.entity';
 import { CreateVehicleDto } from './dtos/create-vehicle.dto';
 import { UpdateVehicleDto } from './dtos/update-vehicle.dto';
+import { VehicleQueryFindAll } from './dtos/types';
+import { Op, WhereOptions } from 'sequelize';
 
 @Injectable()
 export class VehicleService {
@@ -14,8 +16,40 @@ export class VehicleService {
     return createdVehicle;
   }
 
-  async findAll() {
-    return await this.vehicleModel.findAll();
+  async findAll(query: VehicleQueryFindAll) {
+    const {
+      limit,
+      page,
+      vehicle_id,
+      license_plate,
+      color,
+      manufacture_year,
+      mileage_initial,
+      mileage_final,
+      user_id,
+    } = query;
+    const offset = (page - 1) * limit;
+
+    const where: WhereOptions<Vehicle> = {};
+
+    if (vehicle_id) where.vehicle_id = vehicle_id;
+
+    if (license_plate) where.license_plate = { [Op.iLike]: `%${license_plate}%` };
+
+    if (color) where.color = { [Op.iLike]: `%${color}%` };
+
+    if (manufacture_year) where.manufacture_year = manufacture_year;
+
+    if (mileage_initial) where.mileage = { [Op.gte]: Number(mileage_initial) };
+    if (mileage_final) where.mileage = { [Op.lte]: Number(mileage_final) };
+
+    if (user_id) where.user_id = user_id;
+
+    return await this.vehicleModel.findAll({
+      limit,
+      offset,
+      where,
+    });
   }
 
   async update(id: string, data: UpdateVehicleDto) {

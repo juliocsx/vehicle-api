@@ -5,7 +5,8 @@ import { BrandModule } from './modules/brand/brand.module';
 import { CarModelModule } from './modules/car-model/car-model.module';
 import { DatabaseModule } from './database/database.module';
 import { AuthModule } from './modules/auth/auth.module';
-import { BodyFormatter } from './middleware/bodyformatter.middleware';
+import { BodyFormatter } from './shared/middlewares/bodyformatter.middleware';
+import { PaginationMiddleware } from './shared/middlewares/pagination.middleware';
 
 @Module({
   imports: [
@@ -21,6 +22,6 @@ import { BodyFormatter } from './middleware/bodyformatter.middleware';
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(BodyFormatter).forRoutes("*");
+    consumer.apply(BodyFormatter, PaginationMiddleware).forRoutes("*");
   }
 }

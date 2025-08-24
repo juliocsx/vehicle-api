@@ -3,6 +3,8 @@ import { InjectModel } from '@nestjs/sequelize';
 import { Brand } from './brand.entity';
 import { CreateBrandDto } from './dtos/create-brand.dto';
 import { UpdateBrandDto } from './dtos/update-brand.dto';
+import { BrandQueryFindAll } from './dtos/types';
+import { Op, WhereOptions } from 'sequelize';
 
 @Injectable()
 export class BrandService {
@@ -25,8 +27,21 @@ export class BrandService {
     return createdBrand;
   }
 
-  async findAll() {
-    return await this.brandModel.findAll();
+  async findAll(query: BrandQueryFindAll) {
+    const { limit, page, brand_id, describe } = query;
+    const offset = (page - 1) * limit;
+
+    const where: WhereOptions<Brand> = {};
+
+    if (brand_id) where.brand_id = brand_id;
+
+    if (describe) where.describe = { [Op.iLike]: `%${describe}%` };
+
+    return await this.brandModel.findAll({
+      limit,
+      offset,
+      where,
+    });
   }
 
   async update(id: string, data: UpdateBrandDto) {

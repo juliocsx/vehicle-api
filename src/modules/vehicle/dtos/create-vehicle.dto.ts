@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
 export class CreateVehicleDto {
   @IsNotEmpty()
@@ -15,8 +15,8 @@ export class CreateVehicleDto {
   manufacture_year: string;
 
   @IsNotEmpty()
-  @IsString()
-  mileage: string;
+  @IsNumber()
+  mileage: number;
 
   @IsNotEmpty()
   @IsString()
