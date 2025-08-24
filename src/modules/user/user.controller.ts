@@ -25,7 +25,7 @@ import {
 import { UserQueryDto } from './dtos/query-user.dto';
 import { PaginationQuery } from 'src/shared/dtos/types';
 
-@ApiTags('Abobrinha 2')
+@ApiTags('User')
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}

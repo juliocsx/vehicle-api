@@ -18,10 +18,12 @@ import {
   ApiOperation,
   ApiResponse,
   ApiParam,
+  ApiTags,
 } from '@nestjs/swagger';
 import { PaginationQuery } from 'src/shared/dtos/types';
 import { BrandQueryDto } from './dtos/query-brand.dto';
 
+@ApiTags('Brand')
 @UseGuards(AuthGuard)
 @ApiBearerAuth()
 @Controller('brand')

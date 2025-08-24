@@ -17,10 +17,12 @@ import {
   ApiOperation,
   ApiResponse,
   ApiParam,
+  ApiTags,
 } from '@nestjs/swagger';
 import { PaginationQuery } from 'src/shared/dtos/types';
 import { CarModelQueryDto } from './dtos/query-car-model.dto';
 
+@ApiTags('Car Model')
 @UseGuards(AuthGuard)
 @ApiBearerAuth()
 @Controller('car-model')
